@@ -1,11 +1,18 @@
 package connpasscala
 
-import argonaut._
-import Argonaut._
+object Connpasscala {
+  import Response._
 
-object Connpass {
-  def parse(json: String): Option[Response] = {
-    json.decodeOption[Response]
+  val endPoint = "http://connpass.com/api/v1/event/"
+  val requestRepository = new RequestRepository(endPoint)
+
+  implicit class RunRequest(rb: requestRepository.RequestBuilder) {
+    def run(): Option[Connpass] = Response.parse(rb.build.runString)
   }
+
+  object Client {
+    def apply() = requestRepository.getRequestBuilder()
+  }
+
 }
 
